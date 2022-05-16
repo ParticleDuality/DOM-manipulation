@@ -3,6 +3,12 @@ const url = `${baseUrl}/api/avo`
 const appNode = document.querySelector('#app')
 appNode.className = 'grid grid-cols-1 md:grid-cols-2 gap-2 justify-items-center mt-4'
 
+appNode.addEventListener('click', (event) => {
+  if (event.target.nodeName === 'H2') {
+    window.alert('Hola')
+  }
+})
+
 const formatPrice = (price) => {
   const newPrice = new window.Intl.NumberFormat('en-EN', {
     style: 'currency',
