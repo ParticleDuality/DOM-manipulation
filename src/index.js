@@ -1,25 +1,55 @@
 const baseUrl = 'https://platzi-avo.vercel.app'
 const url = `${baseUrl}/api/avo`
 const appNode = document.querySelector('#app')
+appNode.className = 'grid grid-cols-1 md:grid-cols-2 gap-2 justify-items-center mt-4'
+
+const formatPrice = (price) => {
+  const newPrice = new window.Intl.NumberFormat('en-EN', {
+    style: 'currency',
+    currency: 'USD',
+  }).format(price)
+
+  return newPrice
+}
 
 window.fetch(url)
   .then(res => res.json())
   .then(res => {
     const allItems = []	
 
-    res.data.forEach(element => {
-      const image = document.createElement('img')
-      const title = document.createElement('h2')
-      const price = document.createElement('div')
-      const container = document.createElement('div')
+    res.data.forEach(item => {
+      // Crear imagen
+      const image = document.createElement("img");
+      image.src = `${baseUrl}${item.image}`;
+      image.className = "h-16 w-16 md:h-24 md:w-24 rounded-full mx-auto md:mx-0 md:mr-6"
 
-      title.textContent = element.name
-      price.textContent = element.price
-      image.src = `${baseUrl}${element.image}`
+      // Crear título
+      const title = document.createElement("h2");
+      title.className = "text-lg font-semibold"
+      title.textContent = item.name;
 
-      container.append(image, title, price)
+      // Crear precio
+      const price = document.createElement("div");
+      price.className = "text-gray-600 font-light"
+      price.textContent = formatPrice(item.price);
 
-      allItems.push(container)
+      // Creamos un contenedor el título y el precio
+      const priceAndTitle = document.createElement("div")
+      priceAndTitle.className = "text-center md:text-left";
+      priceAndTitle.appendChild(title);
+      priceAndTitle.appendChild(price);
+
+      // Metemos todo dentro de una tarjeta contenedora
+      const card = document.createElement("div");
+      card.className = "md:flex w-80 bg-white rounded-lg p-6 hover:bg-gray-300";
+      card.append(image, priceAndTitle);
+      card.style = 'cursor: pointer'
+
+      // Metemos todo dentro del contenedor principal
+      const container = document.createElement("div");
+      container.appendChild(card);
+
+      allItems.push(container);
     })
 
     appNode.append(...allItems)
